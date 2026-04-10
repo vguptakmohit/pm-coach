@@ -563,7 +563,8 @@ function initApp(){
     btn.dataset.company=co;btn.textContent=co;
     btn.onclick=function(){setCompany(this);};list.appendChild(btn);
   });
-  state.company=profile.companies[0];
+  state.company = profile.companies[0] || null;
+  console.log('initApp: company set to', state.company, '| companies:', profile.companies);
   renderHistory();
 }
 function setCompany(btn){document.querySelectorAll('.co-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');state.company=btn.dataset.company;}
@@ -637,7 +638,14 @@ async function callClaude(system,userMsg){
 }
 
 async function getNewQuestion(){
-  if(state.isLoading||!state.company)return;
+  if(state.isLoading)return;
+  // fallback: if no company selected yet, pick first from profile
+  if(!state.company && profile && profile.companies && profile.companies.length){
+    state.company = profile.companies[0];
+    const firstBtn = document.querySelector('.co-btn');
+    if(firstBtn){ document.querySelectorAll('.co-btn').forEach(b=>b.classList.remove('active')); firstBtn.classList.add('active'); }
+  }
+  if(!state.company){ addMsg('iv','Please select a company from the left panel first.'); return; }
   state.isLoading=true;document.getElementById('new-q-btn').disabled=true;
   const sys=`You are a tough but fair PM interviewer at ${state.company}.\nCandidate: ${profile.name}${profile.role?', '+profile.role:''}.\nBackground: ${profile.background}\nAsk ONE ${state.type} question tailored to ${state.company} and this candidate's background.\nMake it specific and challenging. No hints. No sub-questions. Just the question. Under 3 sentences. No filler.`;
   showTyping();
@@ -699,7 +707,13 @@ function setVoiceStatus(s,msg){
   else el.innerHTML='Enter to send · Shift+Enter for new line · Mic for voice';
 }
 function resetAll(){if(confirm('Reset everything?')){localStorage.removeItem(STORAGE_KEY);localStorage.removeItem(HISTORY_KEY);location.reload();}}
-if(loadProfile()){document.getElementById('onboarding').style.display='none';initApp();}
+if(loadProfile()){
+  console.log('Profile loaded:', profile.name, '| companies:', profile.companies);
+  document.getElementById('onboarding').style.display='none';
+  initApp();
+} else {
+  console.log('No profile found, showing onboarding');
+}
 </script>
 </body>
 </html>
