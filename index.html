@@ -3,354 +3,463 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PM Interview Coach</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<title>PM Interview Coach — Mohit Gupta</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0A0A0A;
-  --surface: #111111;
-  --surface2: #1A1A1A;
-  --surface3: #222222;
-  --border: #2A2A2A;
-  --border2: #333333;
-  --text: #F0EDE8;
-  --text2: #888880;
-  --text3: #444440;
-  --accent: #C8F060;
-  --accent2: #A8D040;
-  --red: #FF6B5B;
-  --amber: #FFB84D;
-  --teal: #4DCCAA;
-  --purple: #A78BFA;
-  --blue: #60A5FA;
-  --radius: 10px;
+  --bg:       #0A0A0A;
+  --surface:  #141414;
+  --surface2: #1C1C1C;
+  --surface3: #242424;
+  --border:   rgba(255,255,255,0.08);
+  --border2:  rgba(255,255,255,0.13);
+  --text:     #FFFFFF;
+  --text2:    rgba(255,255,255,0.55);
+  --text3:    rgba(255,255,255,0.28);
+  --amber:    #E07B3F;
+  --green:    #4CAF7D;
+  --red:      #E05555;
+  --radius:   12px;
+  --serif:    'DM Serif Display', Georgia, serif;
+  --sans:     'Inter', -apple-system, sans-serif;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--bg); color: var(--text); font-family: 'Instrument Sans', sans-serif; min-height: 100vh; overflow: hidden; }
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:var(--sans);font-size:14px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
 
 /* ── ONBOARDING ── */
-#onboarding {
-  position: fixed; inset: 0; background: var(--bg);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 100; padding: 20px;
+#onboarding{
+  position:fixed;inset:0;background:var(--bg);
+  display:flex;align-items:flex-start;justify-content:center;
+  z-index:100;padding:24px;overflow-y:auto;
 }
-.ob-card {
-  background: var(--surface); border: 1px solid var(--border2);
-  border-radius: 16px; padding: 40px; width: 100%; max-width: 560px;
-  max-height: 90vh; overflow-y: auto;
-}
-.ob-card::-webkit-scrollbar { width: 3px; }
-.ob-card::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
-.ob-logo { font-family: 'DM Serif Display', serif; font-size: 22px; margin-bottom: 6px; }
-.ob-logo span { color: var(--accent); }
-.ob-sub { font-size: 13px; color: var(--text2); margin-bottom: 32px; line-height: 1.5; }
-.ob-label { font-size: 11px; font-family: 'DM Mono', monospace; color: var(--text2); letter-spacing: 0.1em; margin-bottom: 8px; display: block; }
-.ob-input, .ob-textarea {
-  width: 100%; background: var(--surface2); border: 1px solid var(--border2);
-  border-radius: var(--radius); color: var(--text); font-family: 'Instrument Sans', sans-serif;
-  font-size: 14px; padding: 11px 14px; outline: none; transition: border-color 0.15s;
-  margin-bottom: 20px;
-}
-.ob-textarea { resize: vertical; min-height: 90px; line-height: 1.5; }
-.ob-input:focus, .ob-textarea:focus { border-color: var(--accent); }
-.ob-input::placeholder, .ob-textarea::placeholder { color: var(--text3); }
-.ob-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-.ob-row .ob-input { margin-bottom: 0; }
-.ob-companies { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
-.ob-co-btn {
-  padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border2);
-  background: transparent; color: var(--text2); font-size: 13px; cursor: pointer;
-  font-family: 'Instrument Sans', sans-serif; transition: all 0.15s;
-}
-.ob-co-btn.selected { border-color: var(--accent); color: var(--accent); background: rgba(200,240,96,0.07); }
-.ob-co-input { flex: 1; min-width: 140px; }
-.ob-hint { font-size: 12px; color: var(--text3); margin-bottom: 20px; line-height: 1.5; }
-.ob-submit {
-  width: 100%; padding: 13px; border-radius: var(--radius); border: none;
-  background: var(--accent); color: #0A0A0A; font-size: 15px; font-weight: 600;
-  cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s;
-}
-.ob-submit:hover { background: var(--accent2); }
-.ob-submit:disabled { background: var(--border2); color: var(--text3); cursor: not-allowed; }
-.ob-divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
-.ob-section-title { font-size: 13px; font-weight: 500; color: var(--text2); margin-bottom: 16px; }
+.ob-wrap{width:100%;max-width:520px;padding:64px 0 80px;}
 
-/* ── MAIN APP ── */
-#app { display: none; height: 100vh; flex-direction: column; }
-#app.visible { display: flex; }
+.ob-title{
+  font-family:var(--serif);
+  font-size:40px;line-height:1.15;letter-spacing:-0.02em;
+  color:var(--text);margin-bottom:14px;
+}
+.ob-title em{font-style:italic;color:var(--text2);}
+.ob-sub{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:48px;max-width:400px;}
 
-.header {
-  padding: 14px 24px; border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; gap: 16px; background: var(--surface);
-  flex-shrink: 0;
+.ob-field{margin-bottom:24px;}
+.ob-label{
+  font-size:11px;letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--text3);font-weight:500;display:block;margin-bottom:9px;
 }
-.logo { font-family: 'DM Serif Display', serif; font-size: 17px; }
-.logo span { color: var(--accent); }
-.header-user {
-  font-size: 12px; color: var(--text2); font-family: 'DM Mono', monospace;
-  background: var(--surface2); border: 1px solid var(--border); border-radius: 20px;
-  padding: 3px 12px;
+.ob-note{font-size:11px;text-transform:none;letter-spacing:0;color:var(--text3);font-weight:400;}
+.ob-input,.ob-textarea{
+  width:100%;background:var(--surface2);
+  border:1px solid var(--border2);
+  border-radius:var(--radius);color:var(--text);
+  font-family:var(--sans);font-size:14px;
+  padding:12px 16px;outline:none;
+  transition:border-color 0.15s;
 }
-.header-actions { margin-left: auto; display: flex; gap: 8px; }
-.hdr-btn {
-  padding: 5px 12px; border-radius: 6px; border: 1px solid var(--border2);
-  background: transparent; color: var(--text2); font-size: 12px; cursor: pointer;
-  font-family: 'Instrument Sans', sans-serif; transition: all 0.15s;
-}
-.hdr-btn:hover { color: var(--text); border-color: var(--text3); }
-.hdr-btn.danger:hover { color: var(--red); border-color: var(--red); }
+.ob-textarea{resize:vertical;min-height:90px;line-height:1.6;}
+.ob-input:focus,.ob-textarea:focus{border-color:rgba(255,255,255,0.4);}
+.ob-input::placeholder,.ob-textarea::placeholder{color:var(--text3);}
+.ob-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.ob-hint{font-size:12px;color:var(--text3);line-height:1.5;margin-top:7px;}
 
-.body { display: grid; grid-template-columns: 240px 1fr 260px; flex: 1; min-height: 0; overflow: hidden; }
+.ob-companies{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
+.ob-co-btn{
+  padding:5px 14px;border-radius:20px;
+  border:1px solid var(--border2);
+  background:transparent;color:var(--text2);
+  font-size:13px;cursor:pointer;font-family:var(--sans);
+  transition:all 0.12s;
+}
+.ob-co-btn:hover{border-color:rgba(255,255,255,0.35);color:var(--text);}
+.ob-co-btn.selected{border-color:var(--text);background:var(--text);color:#0A0A0A;}
 
-/* ── LEFT SIDEBAR ── */
-.left-panel {
-  border-right: 1px solid var(--border); background: var(--surface);
-  display: flex; flex-direction: column; overflow: hidden;
-}
-.panel-header { padding: 14px 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
-.panel-title { font-size: 11px; font-family: 'DM Mono', monospace; color: var(--text3); letter-spacing: 0.1em; }
-.panel-scroll { overflow-y: auto; flex: 1; padding: 12px; }
-.panel-scroll::-webkit-scrollbar { width: 3px; }
-.panel-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.ob-divider{border:none;border-top:1px solid var(--border);margin:36px 0;}
 
-.section-label { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--text3); letter-spacing: 0.1em; margin: 12px 4px 6px; }
-.sel-btn {
-  display: block; width: 100%; text-align: left; padding: 8px 10px;
-  border-radius: 8px; border: 1px solid transparent; background: transparent;
-  color: var(--text2); font-family: 'Instrument Sans', sans-serif; font-size: 13px;
-  cursor: pointer; transition: all 0.15s; margin-bottom: 2px;
+.ob-submit{
+  width:100%;padding:14px;
+  border-radius:40px;border:none;
+  background:var(--text);color:#0A0A0A;
+  font-size:14px;font-weight:600;
+  cursor:pointer;font-family:var(--sans);
+  transition:opacity 0.15s;display:flex;
+  align-items:center;justify-content:center;gap:8px;
 }
-.sel-btn:hover { background: var(--surface2); color: var(--text); }
-.sel-btn.active { background: var(--surface2); border-color: var(--border); color: var(--text); }
-.sel-btn.co-btn.active { border-color: rgba(200,240,96,0.4); color: var(--accent); background: rgba(200,240,96,0.06); }
-.type-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 8px; vertical-align: middle; }
-.co-tag { font-size: 10px; font-family: 'DM Mono', monospace; padding: 1px 5px; border-radius: 3px; background: var(--surface3); color: var(--text3); margin-left: 4px; vertical-align: middle; }
-.new-q-btn {
-  width: 100%; margin-top: 12px; padding: 10px; border-radius: var(--radius);
-  border: 1px solid var(--accent); background: rgba(200,240,96,0.08); color: var(--accent);
-  font-size: 13px; font-weight: 500; cursor: pointer; font-family: 'Instrument Sans', sans-serif;
-  transition: all 0.15s;
-}
-.new-q-btn:hover { background: rgba(200,240,96,0.15); }
-.new-q-btn:disabled { border-color: var(--border); color: var(--text3); background: transparent; cursor: not-allowed; }
+.ob-submit:hover{opacity:0.85;}
 
-/* ── CHAT ── */
-.chat-area { display: flex; flex-direction: column; overflow: hidden; }
-.messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
-.messages::-webkit-scrollbar { width: 4px; }
-.messages::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+/* ── APP ── */
+#app{display:none;height:100vh;flex-direction:column;overflow:hidden;}
+#app.visible{display:flex;}
 
-.msg { display: flex; gap: 10px; animation: fadeUp 0.25s ease; }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-.msg-av {
-  width: 26px; height: 26px; border-radius: 6px; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 10px; font-weight: 600; font-family: 'DM Mono', monospace; margin-top: 2px;
+/* NAV — matches portfolio exactly */
+.nav{
+  display:flex;align-items:center;padding:0 28px;height:56px;
+  border-bottom:1px solid var(--border);background:var(--bg);
+  flex-shrink:0;gap:0;
 }
-.msg-av.iv { background: rgba(200,240,96,0.12); color: var(--accent); border: 1px solid rgba(200,240,96,0.25); }
-.msg-av.user { background: var(--surface2); color: var(--text2); border: 1px solid var(--border); }
-.msg-body { flex: 1; min-width: 0; }
-.msg-name { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--text3); margin-bottom: 5px; letter-spacing: 0.05em; }
-.msg-text { font-size: 14px; line-height: 1.7; color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; }
-.msg.user .msg-text { background: var(--surface2); border-color: var(--border2); color: var(--text2); }
+.nav-links{display:flex;gap:28px;margin-left:32px;}
+.nav-link{font-size:14px;color:var(--text2);cursor:pointer;transition:color 0.12s;border:none;background:none;font-family:var(--sans);}
+.nav-link:hover{color:var(--text);}
+.nav-link.active{color:var(--text);}
+.nav-actions{margin-left:auto;display:flex;gap:10px;align-items:center;}
+.nav-pill{
+  padding:6px 16px;border-radius:40px;
+  border:1px solid var(--border2);background:transparent;
+  color:var(--text);font-size:13px;cursor:pointer;
+  font-family:var(--sans);transition:all 0.12s;
+  display:flex;align-items:center;gap:6px;
+}
+.nav-pill:hover{border-color:rgba(255,255,255,0.35);}
 
-.feedback-card { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-.fb-header { padding: 9px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; }
-.fb-header-label { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--text3); letter-spacing: 0.1em; }
-.score-badge { margin-left: auto; font-size: 14px; font-weight: 600; font-family: 'DM Mono', monospace; }
-.score-badge.high { color: var(--accent); }
-.score-badge.mid { color: var(--amber); }
-.score-badge.low { color: var(--red); }
-.fb-section { padding: 11px 14px; border-bottom: 1px solid var(--border); font-size: 13px; line-height: 1.65; }
-.fb-section:last-child { border-bottom: none; }
-.fb-label { font-size: 10px; font-family: 'DM Mono', monospace; letter-spacing: 0.1em; margin-bottom: 5px; }
-.fb-label.worked { color: var(--teal); }
-.fb-label.missing { color: var(--red); }
-.fb-label.sample { color: var(--amber); }
-.fb-section p { color: var(--text2); }
+/* BODY */
+.body{display:grid;grid-template-columns:220px 1fr 248px;flex:1;min-height:0;overflow:hidden;}
 
-.typing { display: flex; gap: 4px; align-items: center; padding: 12px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); width: fit-content; }
-.typing span { width: 5px; height: 5px; background: var(--text3); border-radius: 50%; animation: bounce 1.2s infinite; }
-.typing span:nth-child(2) { animation-delay: 0.2s; }
-.typing span:nth-child(3) { animation-delay: 0.4s; }
-@keyframes bounce { 0%,60%,100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-4px); opacity: 1; } }
+/* LEFT */
+.left-panel{
+  border-right:1px solid var(--border);background:var(--bg);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.panel-scroll{padding:20px 14px;overflow-y:auto;flex:1;}
+.panel-scroll::-webkit-scrollbar{width:3px;}
+.panel-scroll::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:2px;}
+.p-label{
+  font-size:10px;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--text3);font-weight:500;display:block;margin-bottom:8px;
+}
+.p-group{margin-bottom:24px;}
 
-.input-area { padding: 14px 20px 18px; border-top: 1px solid var(--border); background: var(--surface); flex-shrink: 0; }
-.input-wrap { display: flex; gap: 8px; align-items: flex-end; }
-textarea#answer-input {
-  flex: 1; background: var(--surface2); border: 1px solid var(--border2);
-  border-radius: var(--radius); color: var(--text); font-family: 'Instrument Sans', sans-serif;
-  font-size: 14px; padding: 10px 13px; resize: none; min-height: 42px; max-height: 140px;
-  outline: none; transition: border-color 0.15s; line-height: 1.5;
+.sel-btn{
+  display:flex;align-items:center;gap:9px;
+  width:100%;text-align:left;padding:8px 10px;
+  border-radius:8px;border:1px solid transparent;
+  background:transparent;color:var(--text2);
+  font-family:var(--sans);font-size:13px;
+  cursor:pointer;transition:all 0.12s;margin-bottom:2px;
 }
-textarea#answer-input::placeholder { color: var(--text3); }
-textarea#answer-input:focus { border-color: var(--accent); }
-.send-btn {
-  width: 42px; height: 42px; border-radius: var(--radius); border: 1px solid var(--accent);
-  background: var(--accent); color: #0A0A0A; font-size: 16px; font-weight: 700;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; transition: all 0.15s;
+.sel-btn:hover{background:var(--surface2);color:var(--text);}
+.sel-btn.active{background:var(--surface2);border-color:var(--border2);color:var(--text);}
+.sel-btn.co-btn.active{
+  background:var(--text);color:#0A0A0A;border-color:var(--text);
 }
-.send-btn:hover { background: var(--accent2); }
-.send-btn:disabled { background: var(--border); border-color: var(--border); color: var(--text3); cursor: not-allowed; }
-.mic-btn {
-  width: 42px; height: 42px; border-radius: var(--radius); border: 1px solid var(--border2);
-  background: transparent; color: var(--text2); font-size: 16px;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; transition: all 0.15s; position: relative;
-}
-.mic-btn:hover { border-color: var(--text3); color: var(--text); }
-.mic-btn.listening {
-  border-color: var(--red); color: var(--red);
-  background: rgba(255,107,91,0.08);
-  animation: mic-pulse 1.2s ease-in-out infinite;
-}
-.mic-btn.listening::after {
-  content: ''; position: absolute; inset: -4px; border-radius: 12px;
-  border: 1.5px solid var(--red); opacity: 0.4;
-  animation: mic-ring 1.2s ease-in-out infinite;
-}
-.mic-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-@keyframes mic-pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.06); }
-}
-@keyframes mic-ring {
-  0% { transform: scale(1); opacity: 0.4; }
-  100% { transform: scale(1.5); opacity: 0; }
-}
-.voice-status {
-  font-size: 11px; font-family: 'DM Mono', monospace; margin-top: 7px;
-  display: flex; align-items: center; gap: 6px;
-}
-.voice-status .vs-dot {
-  width: 5px; height: 5px; border-radius: 50%; background: var(--red);
-  animation: mic-pulse 1s infinite;
-}
-.input-hint { font-size: 11px; color: var(--text3); font-family: 'DM Mono', monospace; margin-top: 7px; }
+.type-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
 
-.empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: var(--text3); text-align: center; padding: 40px; }
-.empty-icon { font-family: 'DM Serif Display', serif; font-size: 44px; color: var(--border2); font-style: italic; }
-.empty-title { font-size: 14px; color: var(--text2); font-weight: 500; }
-.empty-sub { font-size: 13px; line-height: 1.6; max-width: 260px; }
-.empty-btn { margin-top: 8px; padding: 8px 18px; border-radius: 20px; border: 1px solid var(--border2); background: transparent; color: var(--text2); font-size: 13px; cursor: pointer; font-family: 'Instrument Sans', sans-serif; transition: all 0.15s; }
-.empty-btn:hover { border-color: var(--accent); color: var(--accent); }
-
-/* ── RIGHT PANEL — HISTORY ── */
-.right-panel {
-  border-left: 1px solid var(--border); background: var(--surface);
-  display: flex; flex-direction: column; overflow: hidden;
+/* The ↗ style Ask button matching portfolio CTA */
+.ask-btn{
+  width:100%;margin-top:10px;padding:11px;
+  border-radius:40px;border:1px solid var(--border2);
+  background:var(--text);color:#0A0A0A;
+  font-size:13px;font-weight:600;cursor:pointer;
+  font-family:var(--sans);transition:opacity 0.15s;
+  display:flex;align-items:center;justify-content:center;gap:6px;
 }
-.hist-empty { padding: 20px 16px; font-size: 13px; color: var(--text3); line-height: 1.6; }
-.hist-item {
-  padding: 12px 14px; border-bottom: 1px solid var(--border);
-  cursor: pointer; transition: background 0.12s;
+.ask-btn:hover{opacity:0.85;}
+.ask-btn:disabled{
+  background:var(--surface2);border-color:var(--border);
+  color:var(--text3);cursor:not-allowed;opacity:1;
 }
-.hist-item:hover { background: var(--surface2); }
-.hist-q { font-size: 12px; color: var(--text2); line-height: 1.5; margin-bottom: 6px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.hist-meta { display: flex; align-items: center; gap: 6px; }
-.hist-co { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--text3); }
-.hist-score { font-size: 11px; font-family: 'DM Mono', monospace; font-weight: 600; margin-left: auto; }
-.hist-score.high { color: var(--accent); }
-.hist-score.mid { color: var(--amber); }
-.hist-score.low { color: var(--red); }
-.hist-score.none { color: var(--text3); }
-.hist-type-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
-.clear-hist-btn { margin: 10px 14px; padding: 7px 12px; border-radius: 6px; border: 1px solid var(--border2); background: transparent; color: var(--text3); font-size: 12px; cursor: pointer; font-family: 'Instrument Sans', sans-serif; width: calc(100% - 28px); transition: all 0.15s; }
-.clear-hist-btn:hover { color: var(--red); border-color: var(--red); }
 
-/* ── STATS ── */
-.stats-bar { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
-.stat { background: var(--surface2); border-radius: 6px; padding: 8px 10px; text-align: center; }
-.stat-num { font-size: 18px; font-weight: 500; font-family: 'DM Mono', monospace; color: var(--text); }
-.stat-lbl { font-size: 10px; color: var(--text3); margin-top: 1px; }
+/* CHAT */
+.chat-area{display:flex;flex-direction:column;overflow:hidden;background:var(--bg);}
+.messages{flex:1;overflow-y:auto;padding:32px;display:flex;flex-direction:column;gap:24px;}
+.messages::-webkit-scrollbar{width:4px;}
+.messages::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:2px;}
 
-@media (max-width: 900px) {
-  .body { grid-template-columns: 1fr; }
-  .left-panel, .right-panel { display: none; }
+/* Empty state — echoes portfolio hero */
+.empty-state{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;padding:40px;gap:12px;
+}
+.empty-serif{
+  font-family:var(--serif);font-size:52px;
+  font-style:italic;color:var(--surface3);line-height:1;
+}
+.empty-title{
+  font-family:var(--serif);font-size:26px;
+  font-weight:400;letter-spacing:-0.01em;
+  color:var(--text);
+}
+.empty-title em{font-style:italic;color:var(--text2);}
+.empty-sub{font-size:13px;color:var(--text3);max-width:260px;line-height:1.65;}
+.empty-cta{
+  margin-top:8px;padding:9px 22px;border-radius:40px;
+  border:1px solid var(--border2);background:transparent;
+  color:var(--text2);font-size:13px;cursor:pointer;
+  font-family:var(--sans);transition:all 0.12s;
+  display:flex;align-items:center;gap:6px;
+}
+.empty-cta:hover{border-color:rgba(255,255,255,0.35);color:var(--text);}
+
+/* Messages */
+.msg{display:flex;gap:12px;animation:fadeUp 0.22s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
+.msg-av{
+  width:30px;height:30px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:600;flex-shrink:0;
+  margin-top:1px;font-family:var(--sans);letter-spacing:0.03em;
+}
+.msg-av.iv{background:var(--text);color:#0A0A0A;border:none;}
+.msg-av.user{background:var(--surface3);color:var(--text2);border:1px solid var(--border2);}
+.msg-body{flex:1;min-width:0;}
+.msg-name{
+  font-size:10px;letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--text3);margin-bottom:7px;font-weight:500;
+}
+.msg-text{
+  font-size:14px;line-height:1.75;color:var(--text);
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:14px 18px;
+}
+.msg.user .msg-text{
+  background:transparent;border-color:transparent;
+  padding-left:0;color:var(--text2);
+}
+
+/* Typing */
+.typing{
+  display:flex;gap:5px;align-items:center;padding:14px 18px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);width:fit-content;
+}
+.typing span{width:4px;height:4px;background:var(--text3);border-radius:50%;animation:bounce 1.2s infinite;}
+.typing span:nth-child(2){animation-delay:0.2s;}
+.typing span:nth-child(3){animation-delay:0.4s;}
+@keyframes bounce{0%,60%,100%{transform:translateY(0);opacity:0.4;}30%{transform:translateY(-4px);opacity:1;}}
+
+/* Feedback card — matches portfolio's dark card style */
+.feedback-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;
+}
+.fb-header{
+  padding:11px 18px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;background:var(--surface2);
+}
+.fb-header-label{
+  font-size:10px;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--text3);font-weight:500;
+}
+.score-badge{margin-left:auto;font-size:13px;font-weight:500;}
+.score-badge.high{color:var(--green);}
+.score-badge.mid{color:var(--amber);}
+.score-badge.low{color:var(--red);}
+.fb-section{padding:14px 18px;border-bottom:1px solid var(--border);font-size:13px;line-height:1.7;}
+.fb-section:last-child{border-bottom:none;}
+.fb-label{font-size:10px;letter-spacing:0.09em;text-transform:uppercase;font-weight:500;margin-bottom:6px;}
+.fb-label.worked{color:var(--green);}
+.fb-label.missing{color:var(--red);}
+.fb-label.sample{color:var(--amber);}
+.fb-section p{color:var(--text2);}
+
+/* INPUT */
+.input-area{
+  padding:14px 32px 20px;border-top:1px solid var(--border);
+  background:var(--bg);flex-shrink:0;
+}
+.input-wrap{display:flex;gap:8px;align-items:flex-end;}
+textarea#answer-input{
+  flex:1;background:var(--surface);border:1px solid var(--border2);
+  border-radius:var(--radius);color:var(--text);font-family:var(--sans);
+  font-size:14px;padding:11px 16px;resize:none;
+  min-height:44px;max-height:140px;outline:none;
+  transition:border-color 0.15s;line-height:1.5;
+}
+textarea#answer-input::placeholder{color:var(--text3);}
+textarea#answer-input:focus{border-color:rgba(255,255,255,0.35);}
+.mic-btn{
+  width:44px;height:44px;border-radius:50%;
+  border:1px solid var(--border2);background:transparent;
+  color:var(--text2);cursor:pointer;display:flex;
+  align-items:center;justify-content:center;
+  flex-shrink:0;transition:all 0.15s;position:relative;
+}
+.mic-btn:hover{border-color:rgba(255,255,255,0.35);color:var(--text);}
+.mic-btn.listening{
+  border-color:var(--red);color:var(--red);
+  background:rgba(224,85,85,0.1);
+  animation:mpulse 1.2s ease-in-out infinite;
+}
+.mic-btn.listening::after{
+  content:'';position:absolute;inset:-4px;border-radius:50%;
+  border:1px solid var(--red);opacity:0.3;
+  animation:mring 1.2s ease-in-out infinite;
+}
+@keyframes mpulse{0%,100%{transform:scale(1);}50%{transform:scale(1.06);}}
+@keyframes mring{0%{transform:scale(1);opacity:0.3;}100%{transform:scale(1.5);opacity:0;}}
+.send-btn{
+  width:44px;height:44px;border-radius:50%;
+  border:none;background:var(--text);color:#0A0A0A;
+  font-size:16px;cursor:pointer;display:flex;
+  align-items:center;justify-content:center;
+  flex-shrink:0;transition:opacity 0.15s;
+}
+.send-btn:hover{opacity:0.82;}
+.send-btn:disabled{background:var(--surface3);color:var(--text3);cursor:not-allowed;opacity:1;}
+.input-hint{font-size:11px;color:var(--text3);margin-top:8px;min-height:16px;}
+.rec-dot{
+  display:inline-block;width:5px;height:5px;border-radius:50%;
+  background:var(--red);margin-right:5px;vertical-align:middle;
+  animation:mpulse 1s infinite;
+}
+
+/* RIGHT PANEL */
+.right-panel{
+  border-left:1px solid var(--border);background:var(--bg);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.rp-head{padding:16px 16px 14px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.rp-title{
+  font-size:10px;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--text3);font-weight:500;display:block;margin-bottom:14px;
+}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+.stat-box{
+  text-align:center;padding:10px 6px;
+  background:var(--surface2);border-radius:8px;
+  border:1px solid var(--border);
+}
+.stat-num{
+  font-size:22px;font-weight:300;color:var(--text);
+  line-height:1;margin-bottom:4px;font-family:var(--serif);
+}
+.stat-lbl{font-size:10px;color:var(--text3);}
+.rp-scroll{overflow-y:auto;flex:1;}
+.rp-scroll::-webkit-scrollbar{width:3px;}
+.rp-scroll::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:2px;}
+.hist-empty{padding:20px 16px;font-size:13px;color:var(--text3);line-height:1.65;}
+.hist-item{padding:12px 16px;border-bottom:1px solid var(--border);transition:background 0.1s;}
+.hist-item:hover{background:var(--surface);}
+.hist-q{font-size:12px;color:var(--text2);line-height:1.5;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.hist-meta{display:flex;align-items:center;gap:6px;}
+.hist-co{font-size:10px;color:var(--text3);}
+.hist-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+.hist-score{font-size:11px;font-weight:500;margin-left:auto;}
+.hist-score.high{color:var(--green);}
+.hist-score.mid{color:var(--amber);}
+.hist-score.low{color:var(--red);}
+.hist-score.none{color:var(--text3);}
+.clear-btn{
+  margin:10px 14px;padding:7px 12px;border-radius:6px;
+  border:1px solid var(--border);background:transparent;
+  color:var(--text3);font-size:12px;cursor:pointer;
+  font-family:var(--sans);width:calc(100% - 28px);transition:all 0.12s;
+}
+.clear-btn:hover{border-color:var(--red);color:var(--red);}
+
+/* Skill tag style from portfolio */
+.skill-tag{
+  display:inline-block;padding:4px 12px;border-radius:20px;
+  border:1px solid var(--border2);font-size:12px;color:var(--text2);
+  font-family:var(--sans);margin:0;
+}
+
+@media(max-width:860px){
+  .body{grid-template-columns:1fr;}
+  .left-panel,.right-panel{display:none;}
+  .nav{padding:0 20px;}
+  .messages,.input-area{padding-left:20px;padding-right:20px;}
 }
 </style>
 </head>
 <body>
 
-<!-- ONBOARDING -->
+<!-- ── ONBOARDING ── -->
 <div id="onboarding">
-  <div class="ob-card">
-    <div class="ob-logo">PM Coach <span>//</span></div>
-    <div class="ob-sub">Your personal AI interview coach. Set up your profile once — every question and feedback will be tailored to you.</div>
+  <div class="ob-wrap">
+    <h1 class="ob-title">Practice like it's<br><em>the real thing.</em></h1>
+    <p class="ob-sub">Set up your profile once. Every question and piece of feedback will be tailored to your background and target companies.</p>
 
-    <div class="ob-section-title">Your profile</div>
-    <div class="ob-row">
-      <div>
-        <label class="ob-label">YOUR NAME</label>
-        <input class="ob-input" id="ob-name" placeholder="e.g. Priya Sharma" style="margin-bottom:0" />
-      </div>
-      <div>
-        <label class="ob-label">CURRENT ROLE</label>
-        <input class="ob-input" id="ob-role" placeholder="e.g. APM at Razorpay" style="margin-bottom:0" />
+    <div class="ob-field">
+      <div class="ob-row">
+        <div>
+          <label class="ob-label">Your name</label>
+          <input class="ob-input" id="ob-name" placeholder="Priya Sharma" />
+        </div>
+        <div>
+          <label class="ob-label">Current role</label>
+          <input class="ob-input" id="ob-role" placeholder="APM at Razorpay" />
+        </div>
       </div>
     </div>
 
-    <label class="ob-label" style="margin-top:16px">YOUR BACKGROUND <span style="color:var(--text3)">(be specific — this shapes every question and feedback)</span></label>
-    <textarea class="ob-textarea" id="ob-background" placeholder="e.g. 2 years at Razorpay working on payment gateway, UPI stack, merchant onboarding. Launched recurring payments feature (₹10L/month revenue). Previously at Zomato on growth team. IIT Delhi CS 2022."></textarea>
-
-    <hr class="ob-divider">
-    <div class="ob-section-title">Target companies <span style="font-size:12px;font-weight:400;color:var(--text3)">(select or add your own)</span></div>
-
-    <div class="ob-companies" id="ob-companies">
-      <button class="ob-co-btn" onclick="toggleCo(this)">Swiggy</button>
-      <button class="ob-co-btn" onclick="toggleCo(this)">Razorpay</button>
-      <button class="ob-co-btn" onclick="toggleCo(this)">PhonePe</button>
-      <button class="ob-co-btn" onclick="toggleCo(this)">CRED</button>
-      <button class="ob-co-btn" onclick="toggleCo(this)">Zepto</button>
-      <button class="ob-co-btn" onclick="toggleCo(this)">Groww</button>
-      <button class="ob-co-btn" onclick="toggleCo(this)">Meesho</button>
-      <button class="ob-co-btn" onclick="toggleCo(this)">Tide</button>
-      <button class="ob-co-btn" onclick="toggleCo(this)">Paylocity</button>
-      <button class="ob-co-btn" onclick="toggleCo(this)">Google</button>
-      <button class="ob-co-btn" onclick="toggleCo(this)">Meta</button>
+    <div class="ob-field">
+      <label class="ob-label">Background <span class="ob-note">— be specific, this shapes every question</span></label>
+      <textarea class="ob-textarea" id="ob-background" placeholder="e.g. 2 years at Razorpay on payment gateway and UPI stack. Launched recurring payments (₹10L/month). Previously at Zomato on growth. IIT Delhi CS 2022."></textarea>
     </div>
-    <input class="ob-input ob-co-input" id="ob-custom-co" placeholder="+ Add another company (press Enter)" onKeyDown="addCustomCo(event)" />
-    <div class="ob-hint">Selected companies appear as options in your interview. You can always change this later.</div>
+
+    <div class="ob-field">
+      <label class="ob-label">Target companies</label>
+      <div class="ob-companies" id="ob-companies">
+        <button class="ob-co-btn" onclick="toggleCo(this)">Swiggy</button>
+        <button class="ob-co-btn" onclick="toggleCo(this)">Razorpay</button>
+        <button class="ob-co-btn" onclick="toggleCo(this)">PhonePe</button>
+        <button class="ob-co-btn" onclick="toggleCo(this)">CRED</button>
+        <button class="ob-co-btn" onclick="toggleCo(this)">Zepto</button>
+        <button class="ob-co-btn" onclick="toggleCo(this)">Groww</button>
+        <button class="ob-co-btn" onclick="toggleCo(this)">Meesho</button>
+        <button class="ob-co-btn" onclick="toggleCo(this)">Tide</button>
+        <button class="ob-co-btn" onclick="toggleCo(this)">Paylocity</button>
+        <button class="ob-co-btn" onclick="toggleCo(this)">Google</button>
+        <button class="ob-co-btn" onclick="toggleCo(this)">Meta</button>
+      </div>
+      <input class="ob-input" id="ob-custom-co" placeholder="+ Add a company and press Enter" onkeydown="addCustomCo(event)" style="margin-top:8px" />
+    </div>
 
     <hr class="ob-divider">
-    <div class="ob-section-title">API key</div>
-    <label class="ob-label">OPENROUTER API KEY <span style="color:var(--text3)">(free at openrouter.ai/keys)</span></label>
-    <input class="ob-input" id="ob-apikey" type="password" placeholder="sk-or-v1-..." />
-    <div class="ob-hint" style="margin-top:-12px">Stored only in your browser. Never sent anywhere except OpenRouter. Get a free key at openrouter.ai — $1 credit on signup, no card needed.</div>
 
-    <button class="ob-submit" id="ob-submit" onclick="saveProfile()">Start coaching →</button>
+    <div class="ob-field">
+      <label class="ob-label">OpenRouter API key <span class="ob-note">— free at openrouter.ai/keys</span></label>
+      <input class="ob-input" id="ob-apikey" type="password" placeholder="sk-or-v1-..." />
+      <p class="ob-hint">Stored only in your browser. Never leaves your device except to call OpenRouter directly.</p>
+    </div>
+
+    <button class="ob-submit" onclick="saveProfile()">
+      <span>↗</span> Start practicing
+    </button>
   </div>
 </div>
 
-<!-- MAIN APP -->
+<!-- ── APP ── -->
 <div id="app">
-  <header class="header">
-    <div class="logo">PM Coach <span>//</span></div>
-    <div class="header-user" id="header-user">—</div>
-    <div class="header-actions">
-      <button class="hdr-btn" onclick="showOnboarding()">Edit profile</button>
-      <button class="hdr-btn danger" onclick="resetAll()">Reset</button>
+
+  <!-- NAV matching portfolio exactly -->
+  <nav class="nav">
+    <div class="nav-links">
+      <button class="nav-link active">Practice</button>
+      <button class="nav-link" onclick="showOnboarding()">Profile</button>
     </div>
-  </header>
+    <div class="nav-actions">
+      <button class="nav-pill" onclick="getNewQuestion()">↗ New Question</button>
+      <button class="nav-pill" onclick="resetAll()" style="color:var(--text3);border-color:var(--border);">Reset</button>
+    </div>
+  </nav>
 
   <div class="body">
+
     <!-- LEFT -->
     <div class="left-panel">
-      <div class="panel-header"><div class="panel-title">INTERVIEW SETUP</div></div>
       <div class="panel-scroll">
-        <div class="section-label">COMPANY</div>
-        <div id="company-list"></div>
-
-        <div class="section-label" style="margin-top:16px">QUESTION TYPE</div>
-        <button class="sel-btn active" data-type="Product Sense" onclick="setType(this)"><span class="type-dot" style="background:var(--teal)"></span>Product Sense</button>
-        <button class="sel-btn" data-type="Metrics & Analytics" onclick="setType(this)"><span class="type-dot" style="background:var(--amber)"></span>Metrics & Analytics</button>
-        <button class="sel-btn" data-type="Execution & RCA" onclick="setType(this)"><span class="type-dot" style="background:var(--red)"></span>Execution & RCA</button>
-        <button class="sel-btn" data-type="Behavioral" onclick="setType(this)"><span class="type-dot" style="background:var(--purple)"></span>Behavioral</button>
-        <button class="sel-btn" data-type="Estimation" onclick="setType(this)"><span class="type-dot" style="background:var(--blue)"></span>Estimation</button>
-        <button class="sel-btn" data-type="AI & GenAI" onclick="setType(this)"><span class="type-dot" style="background:var(--accent)"></span>AI & GenAI</button>
-
-        <button class="new-q-btn" id="new-q-btn" onclick="getNewQuestion()">Ask new question →</button>
+        <div class="p-group">
+          <span class="p-label">Company</span>
+          <div id="company-list"></div>
+        </div>
+        <div class="p-group">
+          <span class="p-label">Question type</span>
+          <button class="sel-btn active" data-type="Product Sense"       onclick="setType(this)"><span class="type-dot" style="background:#4CAF7D"></span>Product Sense</button>
+          <button class="sel-btn"        data-type="Metrics & Analytics" onclick="setType(this)"><span class="type-dot" style="background:#E07B3F"></span>Metrics & Analytics</button>
+          <button class="sel-btn"        data-type="Execution & RCA"     onclick="setType(this)"><span class="type-dot" style="background:#E05555"></span>Execution & RCA</button>
+          <button class="sel-btn"        data-type="Behavioral"          onclick="setType(this)"><span class="type-dot" style="background:rgba(255,255,255,0.4)"></span>Behavioral</button>
+          <button class="sel-btn"        data-type="Estimation"          onclick="setType(this)"><span class="type-dot" style="background:#6B9FE4"></span>Estimation</button>
+          <button class="sel-btn"        data-type="AI & GenAI"          onclick="setType(this)"><span class="type-dot" style="background:#B57BF5"></span>AI & GenAI</button>
+        </div>
+        <button class="ask-btn" id="new-q-btn" onclick="getNewQuestion()">
+          ↗ Ask new question
+        </button>
       </div>
     </div>
 
@@ -358,17 +467,18 @@ textarea#answer-input:focus { border-color: var(--accent); }
     <div class="chat-area">
       <div class="messages" id="messages">
         <div class="empty-state" id="empty-state">
-          <div class="empty-icon">?</div>
-          <div class="empty-title" id="empty-name">Ready when you are</div>
-          <div class="empty-sub">Pick a company and question type, then hit "Ask new question" to begin.</div>
-          <button class="empty-btn" onclick="getNewQuestion()">Get first question →</button>
+          <div class="empty-serif">?</div>
+          <div class="empty-title" id="empty-name">Ready when you <em>are</em></div>
+          <div class="empty-sub">Pick a company and question type, then click Ask new question to begin.</div>
+          <button class="empty-cta" onclick="getNewQuestion()"><span>↗</span> Get first question</button>
         </div>
       </div>
       <div class="input-area">
         <div class="input-wrap">
-          <textarea id="answer-input" placeholder="Type your answer..." rows="1" oninput="autoResize(this)" onkeydown="handleKey(event)"></textarea>
+          <textarea id="answer-input" placeholder="Type your answer..." rows="1"
+            oninput="autoResize(this)" onkeydown="handleKey(event)"></textarea>
           <button class="mic-btn" id="mic-btn" onclick="toggleVoice()" title="Voice answer">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
               <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
               <line x1="12" y1="19" x2="12" y2="23"/>
@@ -377,496 +487,219 @@ textarea#answer-input:focus { border-color: var(--accent); }
           </button>
           <button class="send-btn" id="send-btn" onclick="submitAnswer()" disabled>↑</button>
         </div>
-        <div id="input-status" class="input-hint" style="color:var(--text3)">Enter to send · Shift+Enter for new line · Mic to speak</div>
+        <div class="input-hint" id="input-status">Enter to send · Shift+Enter for new line · Mic for voice</div>
       </div>
     </div>
 
-    <!-- RIGHT — HISTORY -->
+    <!-- RIGHT -->
     <div class="right-panel">
-      <div class="panel-header"><div class="panel-title">SESSION HISTORY</div></div>
-      <div class="stats-bar" id="stats-bar">
-        <div class="stat"><div class="stat-num" id="stat-total">0</div><div class="stat-lbl">Questions</div></div>
-        <div class="stat"><div class="stat-num" id="stat-avg">—</div><div class="stat-lbl">Avg score</div></div>
-        <div class="stat"><div class="stat-num" id="stat-best">—</div><div class="stat-lbl">Best</div></div>
+      <div class="rp-head">
+        <span class="rp-title">Session history</span>
+        <div class="stats-row">
+          <div class="stat-box"><div class="stat-num" id="stat-total">0</div><div class="stat-lbl">Asked</div></div>
+          <div class="stat-box"><div class="stat-num" id="stat-avg">—</div><div class="stat-lbl">Avg</div></div>
+          <div class="stat-box"><div class="stat-num" id="stat-best">—</div><div class="stat-lbl">Best</div></div>
+        </div>
       </div>
-      <div class="panel-scroll" id="history-list">
-        <div class="hist-empty">Your answered questions will appear here with scores.</div>
+      <div class="rp-scroll" id="history-list">
+        <div class="hist-empty">Answered questions appear here with scores.</div>
       </div>
-      <button class="clear-hist-btn" onclick="clearHistory()">Clear history</button>
+      <button class="clear-btn" onclick="clearHistory()">Clear history</button>
     </div>
+
   </div>
 </div>
 
 <script>
-// ── STATE ──
-const STORAGE_KEY = 'pmcoach_profile_v1';
-const HISTORY_KEY = 'pmcoach_history_v1';
-const TYPE_COLORS = {
-  'Product Sense': '#4DCCAA',
-  'Metrics & Analytics': '#FFB84D',
-  'Execution & RCA': '#FF6B5B',
-  'Behavioral': '#A78BFA',
-  'Estimation': '#60A5FA',
-  'AI & GenAI': '#C8F060'
-};
+const STORAGE_KEY='pmcoach_profile_v1',HISTORY_KEY='pmcoach_history_v1';
+const TYPE_COLORS={'Product Sense':'#4CAF7D','Metrics & Analytics':'#E07B3F','Execution & RCA':'#E05555','Behavioral':'rgba(255,255,255,0.4)','Estimation':'#6B9FE4','AI & GenAI':'#B57BF5'};
+let profile=null,state={company:null,type:'Product Sense',currentQuestion:null,isLoading:false};
 
-let profile = null;
-let state = {
-  company: null,
-  type: 'Product Sense',
-  currentQuestion: null,
-  isLoading: false
-};
-
-// ── ONBOARDING ──
-function toggleCo(btn) { btn.classList.toggle('selected'); }
-
-function addCustomCo(e) {
-  if (e.key !== 'Enter') return;
-  const val = e.target.value.trim();
-  if (!val) return;
-  const btn = document.createElement('button');
-  btn.className = 'ob-co-btn selected';
-  btn.textContent = val;
-  btn.onclick = function() { toggleCo(this); };
-  document.getElementById('ob-companies').insertBefore(btn, document.querySelector('.ob-co-input'));
-  e.target.value = '';
+function toggleCo(btn){btn.classList.toggle('selected');}
+function addCustomCo(e){
+  if(e.key!=='Enter')return;
+  const val=e.target.value.trim();if(!val)return;
+  const btn=document.createElement('button');
+  btn.className='ob-co-btn selected';btn.textContent=val;
+  btn.onclick=function(){toggleCo(this);};
+  document.getElementById('ob-companies').appendChild(btn);
+  e.target.value='';
 }
-
-function saveProfile() {
-  const name = document.getElementById('ob-name').value.trim();
-  const role = document.getElementById('ob-role').value.trim();
-  const background = document.getElementById('ob-background').value.trim();
-  const apikey = document.getElementById('ob-apikey').value.trim();
-
-  if (!name || !background || !apikey) {
-    alert('Please fill in your name, background, and OpenRouter API key.');
-    return;
-  }
-
-  const companies = [...document.querySelectorAll('.ob-co-btn.selected')].map(b => b.textContent);
-  if (companies.length === 0) { alert('Please select at least one target company.'); return; }
-
-  profile = { name, role, background, companies, apikey };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
-
-  document.getElementById('onboarding').style.display = 'none';
+function saveProfile(){
+  const name=document.getElementById('ob-name').value.trim(),
+        role=document.getElementById('ob-role').value.trim(),
+        bg=document.getElementById('ob-background').value.trim(),
+        key=document.getElementById('ob-apikey').value.trim();
+  if(!name||!bg||!key){alert('Please fill in your name, background, and API key.');return;}
+  const cos=[...document.querySelectorAll('.ob-co-btn.selected')].map(b=>b.textContent);
+  if(!cos.length){alert('Please select at least one target company.');return;}
+  profile={name,role,background:bg,companies:cos,apikey:key};
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(profile));
+  document.getElementById('onboarding').style.display='none';
   initApp();
 }
-
-function showOnboarding() {
-  if (profile) {
-    document.getElementById('ob-name').value = profile.name || '';
-    document.getElementById('ob-role').value = profile.role || '';
-    document.getElementById('ob-background').value = profile.background || '';
-    document.getElementById('ob-apikey').value = profile.apikey || '';
-    document.querySelectorAll('.ob-co-btn').forEach(b => {
-      b.classList.toggle('selected', profile.companies.includes(b.textContent));
-    });
+function showOnboarding(){
+  if(profile){
+    document.getElementById('ob-name').value=profile.name||'';
+    document.getElementById('ob-role').value=profile.role||'';
+    document.getElementById('ob-background').value=profile.background||'';
+    document.getElementById('ob-apikey').value=profile.apikey||'';
+    document.querySelectorAll('.ob-co-btn').forEach(b=>b.classList.toggle('selected',profile.companies.includes(b.textContent)));
   }
-  document.getElementById('onboarding').style.display = 'flex';
+  document.getElementById('onboarding').style.display='flex';
 }
-
-function loadProfile() {
-  const saved = localStorage.getItem(STORAGE_KEY);
-  if (saved) { profile = JSON.parse(saved); return true; }
-  return false;
+function loadProfile(){
+  try{const s=localStorage.getItem(STORAGE_KEY);if(s){profile=JSON.parse(s);return true;}}catch{}return false;
 }
-
-// ── APP INIT ──
-function initApp() {
+function initApp(){
   document.getElementById('app').classList.add('visible');
-  document.getElementById('header-user').textContent = profile.name + (profile.role ? ' · ' + profile.role : '');
-  document.getElementById('empty-name').textContent = 'Ready when you are, ' + profile.name.split(' ')[0];
-
-  // Build company list
-  const list = document.getElementById('company-list');
-  list.innerHTML = '';
-  profile.companies.forEach((co, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'sel-btn co-btn' + (i === 0 ? ' active' : '');
-    btn.dataset.company = co;
-    btn.innerHTML = co;
-    btn.onclick = function() { setCompany(this); };
-    list.appendChild(btn);
+  const initials=profile.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('nav-logo').textContent=initials;
+  document.getElementById('empty-name').innerHTML='Ready when you <em>are</em>, '+profile.name.split(' ')[0];
+  const list=document.getElementById('company-list');list.innerHTML='';
+  profile.companies.forEach((co,i)=>{
+    const btn=document.createElement('button');
+    btn.className='sel-btn co-btn'+(i===0?' active':'');
+    btn.dataset.company=co;btn.textContent=co;
+    btn.onclick=function(){setCompany(this);};list.appendChild(btn);
   });
-  state.company = profile.companies[0];
+  state.company=profile.companies[0];
   renderHistory();
 }
+function setCompany(btn){document.querySelectorAll('.co-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');state.company=btn.dataset.company;}
+function setType(btn){document.querySelectorAll('[data-type]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');state.type=btn.dataset.type;}
 
-function setCompany(btn) {
-  document.querySelectorAll('.co-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  state.company = btn.dataset.company;
-}
-
-function setType(btn) {
-  document.querySelectorAll('[data-type]').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  state.type = btn.dataset.type;
-}
-
-// ── HISTORY ──
-function getHistory() {
-  try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; } catch { return []; }
-}
-
-function saveToHistory(entry) {
-  const h = getHistory();
-  h.unshift(entry);
-  localStorage.setItem(HISTORY_KEY, JSON.stringify(h.slice(0, 100)));
-  renderHistory();
-}
-
-function clearHistory() {
-  if (confirm('Clear all session history?')) {
-    localStorage.removeItem(HISTORY_KEY);
-    renderHistory();
-  }
-}
-
-function renderHistory() {
-  const h = getHistory();
-  const list = document.getElementById('history-list');
-
-  if (!h.length) {
-    list.innerHTML = '<div class="hist-empty">Your answered questions will appear here with scores.</div>';
-    document.getElementById('stat-total').textContent = '0';
-    document.getElementById('stat-avg').textContent = '—';
-    document.getElementById('stat-best').textContent = '—';
-    return;
-  }
-
-  const scores = h.filter(x => x.score).map(x => x.score);
-  const avg = scores.length ? Math.round(scores.reduce((a,b)=>a+b,0)/scores.length) : null;
-  const best = scores.length ? Math.max(...scores) : null;
-
-  document.getElementById('stat-total').textContent = h.length;
-  document.getElementById('stat-avg').textContent = avg ? avg+'/10' : '—';
-  document.getElementById('stat-best').textContent = best ? best+'/10' : '—';
-
-  list.innerHTML = h.map(item => {
-    const sc = item.score;
-    const cls = sc >= 8 ? 'high' : sc >= 6 ? 'mid' : sc ? 'low' : 'none';
-    const color = TYPE_COLORS[item.type] || '#888';
-    return `<div class="hist-item">
-      <div class="hist-q">${escHtml(item.question)}</div>
-      <div class="hist-meta">
-        <span class="hist-type-dot" style="background:${color}"></span>
-        <span class="hist-co">${escHtml(item.company)}</span>
-        <span class="hist-score ${cls}">${sc ? sc+'/10' : '—'}</span>
-      </div>
-    </div>`;
+function getHistory(){try{return JSON.parse(localStorage.getItem(HISTORY_KEY))||[];}catch{return[];}}
+function saveToHistory(entry){const h=getHistory();h.unshift(entry);localStorage.setItem(HISTORY_KEY,JSON.stringify(h.slice(0,100)));renderHistory();}
+function clearHistory(){if(confirm('Clear all session history?')){localStorage.removeItem(HISTORY_KEY);renderHistory();}}
+function renderHistory(){
+  const h=getHistory(),list=document.getElementById('history-list');
+  if(!h.length){list.innerHTML='<div class="hist-empty">Answered questions appear here with scores.</div>';['stat-total','stat-avg','stat-best'].forEach((id,i)=>document.getElementById(id).textContent=['0','—','—'][i]);return;}
+  const scores=h.filter(x=>x.score).map(x=>x.score);
+  const avg=scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length):null;
+  const best=scores.length?Math.max(...scores):null;
+  document.getElementById('stat-total').textContent=h.length;
+  document.getElementById('stat-avg').textContent=avg?avg+'/10':'—';
+  document.getElementById('stat-best').textContent=best?best+'/10':'—';
+  list.innerHTML=h.map(item=>{
+    const sc=item.score,cls=sc>=8?'high':sc>=6?'mid':sc?'low':'none';
+    return`<div class="hist-item"><div class="hist-q">${escHtml(item.question)}</div><div class="hist-meta"><span class="hist-dot" style="background:${TYPE_COLORS[item.type]||'#888'}"></span><span class="hist-co">${escHtml(item.company)}</span><span class="hist-score ${cls}">${sc?sc+'/10':'—'}</span></div></div>`;
   }).join('');
 }
 
-// ── CHAT UTILS ──
-function escHtml(t) {
-  return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
+function escHtml(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function fmt(t){return escHtml(t).replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');}
+function removeEmpty(){const e=document.getElementById('empty-state');if(e)e.remove();}
+function scrollBottom(){const m=document.getElementById('messages');setTimeout(()=>m.scrollTop=m.scrollHeight,60);}
 
-function fmt(text) {
-  return escHtml(text).replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
-}
-
-function removeEmpty() {
-  const e = document.getElementById('empty-state');
-  if (e) e.remove();
-}
-
-function scrollBottom() {
-  const m = document.getElementById('messages');
-  setTimeout(() => m.scrollTop = m.scrollHeight, 60);
-}
-
-function addMsg(role, content, isHTML = false) {
+function addMsg(role,content,isHTML=false){
   removeEmpty();
-  const msgs = document.getElementById('messages');
-  const div = document.createElement('div');
-  div.className = `msg ${role}`;
-  const av = role === 'iv' ? 'IV' : profile.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-  const label = role === 'iv'
-    ? `INTERVIEWER · ${(state.company||'').toUpperCase()}`
-    : profile.name.toUpperCase() + ' · CANDIDATE';
-  div.innerHTML = `
-    <div class="msg-av ${role}">${av}</div>
-    <div class="msg-body">
-      <div class="msg-name">${label}</div>
-      ${isHTML ? content : `<div class="msg-text">${fmt(content)}</div>`}
-    </div>`;
-  msgs.appendChild(div);
-  scrollBottom();
+  const msgs=document.getElementById('messages'),div=document.createElement('div');
+  div.className=`msg ${role}`;
+  const av=role==='iv'?'IV':profile.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const label=role==='iv'?`Interviewer · ${(state.company||'').toUpperCase()}`:profile.name+' · Candidate';
+  div.innerHTML=`<div class="msg-av ${role}">${av}</div><div class="msg-body"><div class="msg-name">${label}</div>${isHTML?content:`<div class="msg-text">${fmt(content)}</div>`}</div>`;
+  msgs.appendChild(div);scrollBottom();
 }
-
-function showTyping() {
+function showTyping(){
   removeEmpty();
-  const msgs = document.getElementById('messages');
-  const div = document.createElement('div');
-  div.className = 'msg iv'; div.id = 'typing-ind';
-  div.innerHTML = `<div class="msg-av iv">IV</div><div class="msg-body"><div class="msg-name">INTERVIEWER</div><div class="typing"><span></span><span></span><span></span></div></div>`;
-  msgs.appendChild(div); scrollBottom();
+  const msgs=document.getElementById('messages'),div=document.createElement('div');
+  div.className='msg iv';div.id='typing-ind';
+  div.innerHTML=`<div class="msg-av iv">IV</div><div class="msg-body"><div class="msg-name">Interviewer</div><div class="typing"><span></span><span></span><span></span></div></div>`;
+  msgs.appendChild(div);scrollBottom();
 }
+function removeTyping(){const t=document.getElementById('typing-ind');if(t)t.remove();}
+function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,140)+'px';document.getElementById('send-btn').disabled=el.value.trim().length<8;}
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();if(!document.getElementById('send-btn').disabled)submitAnswer();}}
 
-function removeTyping() {
-  const t = document.getElementById('typing-ind');
-  if (t) t.remove();
-}
-
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 140) + 'px';
-  document.getElementById('send-btn').disabled = el.value.trim().length < 8;
-}
-
-function handleKey(e) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (!document.getElementById('send-btn').disabled) submitAnswer(); }
-}
-
-// ── FEEDBACK PARSER ──
-function parseFeedback(text) {
-  const scoreMatch = text.match(/(\d+)\s*\/\s*10/);
-  const score = scoreMatch ? parseInt(scoreMatch[1]) : null;
-  const workedMatch = text.match(/(?:what worked|strengths?)[:\s]+([\s\S]*?)(?=what(?:'s| is| was)? missing|gaps?|improvement|sample|strong answer|$)/i);
-  const missingMatch = text.match(/(?:what(?:'s| is| was)? missing|gaps?|improvements?)[:\s]+([\s\S]*?)(?=sample|strong answer|overall|$)/i);
-  const sampleMatch = text.match(/(?:sample (?:strong )?answer|strong answer|suggested answer)[:\s]+([\s\S]*?)(?=$)/i);
-
-  if (workedMatch || missingMatch || sampleMatch) {
-    const sc = score;
-    const cls = sc >= 8 ? 'high' : sc >= 6 ? 'mid' : 'low';
-    return { score, html: `<div class="feedback-card">
-      <div class="fb-header">
-        <span class="fb-header-label">STRUCTURED FEEDBACK</span>
-        ${sc ? `<span class="score-badge ${cls}">${sc}/10</span>` : ''}
-      </div>
-      ${workedMatch ? `<div class="fb-section"><div class="fb-label worked">✓ WHAT WORKED</div><p>${fmt(workedMatch[1].trim())}</p></div>` : ''}
-      ${missingMatch ? `<div class="fb-section"><div class="fb-label missing">✗ WHAT WAS MISSING</div><p>${fmt(missingMatch[1].trim())}</p></div>` : ''}
-      ${sampleMatch ? `<div class="fb-section"><div class="fb-label sample">◎ SAMPLE STRONG ANSWER</div><p>${fmt(sampleMatch[1].trim())}</p></div>` : ''}
-    </div>` };
+function parseFeedback(text){
+  const sm=text.match(/(\d+)\s*\/\s*10/),score=sm?parseInt(sm[1]):null;
+  const wm=text.match(/(?:what worked|strengths?)[:\s]+([\s\S]*?)(?=what(?:'s| is| was)? missing|gaps?|improvement|sample|strong answer|$)/i);
+  const mm=text.match(/(?:what(?:'s| is| was)? missing|gaps?|improvements?)[:\s]+([\s\S]*?)(?=sample|strong answer|overall|$)/i);
+  const sam=text.match(/(?:sample (?:strong )?answer|strong answer|suggested answer)[:\s]+([\s\S]*?)(?=$)/i);
+  if(wm||mm||sam){
+    const cls=score>=8?'high':score>=6?'mid':'low';
+    return{score,html:`<div class="feedback-card"><div class="fb-header"><span class="fb-header-label">Structured feedback</span>${score?`<span class="score-badge ${cls}">${score}/10</span>`:''}</div>${wm?`<div class="fb-section"><div class="fb-label worked">What worked</div><p>${fmt(wm[1].trim())}</p></div>`:''}${mm?`<div class="fb-section"><div class="fb-label missing">What was missing</div><p>${fmt(mm[1].trim())}</p></div>`:''}${sam?`<div class="fb-section"><div class="fb-label sample">Sample strong answer</div><p>${fmt(sam[1].trim())}</p></div>`:''}</div>`};
   }
-  return { score, html: `<div class="msg-text">${fmt(text)}</div>` };
+  return{score,html:`<div class="msg-text">${fmt(text)}</div>`};
 }
 
-// ── API CALL ──
-// Using OpenRouter — paste your key from openrouter.ai/keys
-// Key is read from user profile (set during onboarding)
-const OPENROUTER_KEY = () => (typeof profile !== 'undefined' && profile.apikey) ? profile.apikey : '';
-
-async function callClaude(system, userMsg) {
-  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${OPENROUTER_KEY()}`,
-      'HTTP-Referer': window.location.href,
-      'X-Title': 'PM Interview Coach',
-    },
-    body: JSON.stringify({
-      model: 'anthropic/claude-sonnet-4-5',
-      max_tokens: 1000,
-      messages: [
-        { role: 'system', content: system },
-        { role: 'user',   content: userMsg }
-      ],
-    })
+const OPENROUTER_KEY=()=>(typeof profile!=='undefined'&&profile.apikey)?profile.apikey:'';
+async function callClaude(system,userMsg){
+  const res=await fetch('https://openrouter.ai/api/v1/chat/completions',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':`Bearer ${OPENROUTER_KEY()}`,'HTTP-Referer':window.location.href,'X-Title':'PM Interview Coach'},
+    body:JSON.stringify({model:'anthropic/claude-sonnet-4-5',max_tokens:1000,messages:[{role:'system',content:system},{role:'user',content:userMsg}]})
   });
-  const data = await res.json();
-  if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
+  const data=await res.json();
+  if(data.error)throw new Error(data.error.message||JSON.stringify(data.error));
   return data.choices[0].message.content;
 }
 
-// ── QUESTION ──
-async function getNewQuestion() {
-  if (state.isLoading || !state.company) return;
-  state.isLoading = true;
-  document.getElementById('new-q-btn').disabled = true;
-
-  const system = `You are a tough but fair PM interviewer at ${state.company}.
-Candidate: ${profile.name}${profile.role ? ', ' + profile.role : ''}.
-Background: ${profile.background}
-Ask ONE ${state.type} question tailored to ${state.company} and this candidate's background.
-Make it specific and challenging. No hints. No sub-questions yet. Just the question. Under 3 sentences. No filler phrases.`;
-
+async function getNewQuestion(){
+  if(state.isLoading||!state.company)return;
+  state.isLoading=true;document.getElementById('new-q-btn').disabled=true;
+  const sys=`You are a tough but fair PM interviewer at ${state.company}.\nCandidate: ${profile.name}${profile.role?', '+profile.role:''}.\nBackground: ${profile.background}\nAsk ONE ${state.type} question tailored to ${state.company} and this candidate's background.\nMake it specific and challenging. No hints. No sub-questions. Just the question. Under 3 sentences. No filler.`;
   showTyping();
-  try {
-    const q = await callClaude(system, `Ask a ${state.type} question for ${state.company}.`);
-    removeTyping();
-    state.currentQuestion = q;
-    addMsg('iv', q);
+  try{
+    const q=await callClaude(sys,`Ask a ${state.type} question for ${state.company}.`);
+    removeTyping();state.currentQuestion=q;addMsg('iv',q);
     document.getElementById('answer-input').focus();
-    document.getElementById('answer-input').placeholder = 'Give your best answer — be as detailed as you would in a real interview...';
-  } catch(e) {
-    removeTyping();
-    addMsg('iv', `Error: ${e.message}`);
-  }
-  state.isLoading = false;
-  document.getElementById('new-q-btn').disabled = false;
+    document.getElementById('answer-input').placeholder='Give your best answer — as detailed as you would in a real interview...';
+  }catch(e){removeTyping();addMsg('iv',`Error: ${e.message}`);}
+  state.isLoading=false;document.getElementById('new-q-btn').disabled=false;
 }
 
-// ── ANSWER + FEEDBACK ──
-async function submitAnswer() {
-  const input = document.getElementById('answer-input');
-  const answer = input.value.trim();
-  if (!answer || state.isLoading || !state.currentQuestion) return;
-  input.value = ''; input.style.height = 'auto';
-  document.getElementById('send-btn').disabled = true;
-  state.isLoading = true;
-  addMsg('user', answer);
-
-  const system = `You are a tough but fair PM interview coach evaluating ${profile.name}.
-Background: ${profile.background}
-Interview question (${state.company}, ${state.type}): "${state.currentQuestion}"
-Evaluate the answer and respond in EXACTLY this format:
-
-Score: X/10
-
-What worked:
-[2-3 specific things done well, referencing their actual answer]
-
-What was missing:
-[2-3 specific gaps — what a top candidate would have added]
-
-Sample strong answer:
-[150-word model answer. Use their actual background and experience where relevant. Be specific to ${state.company}.]
-
-Be direct. No filler. Reference their real experience.`;
-
+async function submitAnswer(){
+  const input=document.getElementById('answer-input'),answer=input.value.trim();
+  if(!answer||state.isLoading||!state.currentQuestion)return;
+  input.value='';input.style.height='auto';
+  document.getElementById('send-btn').disabled=true;state.isLoading=true;addMsg('user',answer);
+  const sys=`You are a tough but fair PM interview coach evaluating ${profile.name}.\nBackground: ${profile.background}\nInterview question (${state.company}, ${state.type}): "${state.currentQuestion}"\nEvaluate the answer in EXACTLY this format:\n\nScore: X/10\n\nWhat worked:\n[2-3 specific things done well]\n\nWhat was missing:\n[2-3 specific gaps]\n\nSample strong answer:\n[150-word model answer using their background, specific to ${state.company}.]\n\nBe direct. No filler. Reference their real experience.`;
   showTyping();
-  try {
-    const feedback = await callClaude(system, `Candidate answer: "${answer}"`);
-    removeTyping();
-    const { score, html } = parseFeedback(feedback);
-
-    const div = document.createElement('div');
-    div.className = 'msg iv';
-    const label = `INTERVIEWER · ${(state.company||'').toUpperCase()} · FEEDBACK`;
-    div.innerHTML = `<div class="msg-av iv">IV</div><div class="msg-body"><div class="msg-name">${label}</div>${html}</div>`;
-    document.getElementById('messages').appendChild(div);
-    scrollBottom();
-
-    saveToHistory({ question: state.currentQuestion, company: state.company, type: state.type, score, ts: Date.now() });
-    input.placeholder = 'Ask a follow-up, or click "Ask new question" for a new question...';
-    state.currentQuestion = null;
-  } catch(e) {
-    removeTyping();
-    addMsg('iv', `Error: ${e.message}`);
-  }
-  state.isLoading = false;
+  try{
+    const fb=await callClaude(sys,`Candidate answer: "${answer}"`);
+    removeTyping();const{score,html}=parseFeedback(fb);
+    const div=document.createElement('div');div.className='msg iv';
+    div.innerHTML=`<div class="msg-av iv">IV</div><div class="msg-body"><div class="msg-name">Interviewer · ${(state.company||'').toUpperCase()} · Feedback</div>${html}</div>`;
+    document.getElementById('messages').appendChild(div);scrollBottom();
+    saveToHistory({question:state.currentQuestion,company:state.company,type:state.type,score,ts:Date.now()});
+    input.placeholder='Ask a follow-up, or click Ask new question for a fresh one...';state.currentQuestion=null;
+  }catch(e){removeTyping();addMsg('iv',`Error: ${e.message}`);}
+  state.isLoading=false;
 }
 
-// ── VOICE INPUT ──
-let recognition = null;
-let isListening = false;
-
-function initRecognition() {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) return null;
-  const r = new SR();
-  r.continuous = true;
-  r.interimResults = true;
-  r.lang = 'en-IN';
-
-  let finalTranscript = '';
-
-  r.onstart = () => {
-    isListening = true;
-    finalTranscript = '';
-    const btn = document.getElementById('mic-btn');
-    btn.classList.add('listening');
-    btn.title = 'Stop recording';
-    setVoiceStatus('listening');
+let recognition=null,isListening=false;
+function initRecognition(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return null;
+  const r=new SR();r.continuous=true;r.interimResults=true;r.lang='en-IN';
+  r.onstart=()=>{isListening=true;document.getElementById('mic-btn').classList.add('listening');setVoiceStatus('listening');};
+  r.onresult=(e)=>{
+    let fin='',int='';
+    for(let i=0;i<e.results.length;i++){if(e.results[i].isFinal)fin+=e.results[i][0].transcript+' ';else int+=e.results[i][0].transcript;}
+    const inp=document.getElementById('answer-input');inp.value=(fin+int).trim();autoResize(inp);
   };
-
-  r.onresult = (e) => {
-    let interim = '';
-    finalTranscript = '';
-    for (let i = 0; i < e.results.length; i++) {
-      if (e.results[i].isFinal) finalTranscript += e.results[i][0].transcript + ' ';
-      else interim += e.results[i][0].transcript;
-    }
-    const input = document.getElementById('answer-input');
-    input.value = (finalTranscript + interim).trim();
-    autoResize(input);
-  };
-
-  r.onerror = (e) => {
-    if (e.error === 'not-allowed') {
-      setVoiceStatus('error', 'Mic access denied — allow microphone in browser settings');
-    } else if (e.error === 'no-speech') {
-      setVoiceStatus('error', 'No speech detected — try again');
-    } else {
-      setVoiceStatus('error', `Error: ${e.error}`);
-    }
-    stopListening();
-  };
-
-  r.onend = () => {
-    if (isListening) r.start(); // keep going until user stops
-  };
-
+  r.onerror=(e)=>{const msg=e.error==='not-allowed'?'Mic access denied — allow in browser settings':e.error==='no-speech'?'No speech detected':'Error: '+e.error;setVoiceStatus('error',msg);stopListening();};
+  r.onend=()=>{if(isListening)r.start();};
   return r;
 }
-
-function toggleVoice() {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) {
-    setVoiceStatus('error', 'Voice not supported — use Chrome or Edge');
-    return;
-  }
-  if (isListening) {
-    stopListening();
-  } else {
-    startListening();
-  }
+function toggleVoice(){if(!(window.SpeechRecognition||window.webkitSpeechRecognition)){setVoiceStatus('error','Voice not supported — use Chrome or Edge');return;}isListening?stopListening():startListening();}
+function startListening(){recognition=initRecognition();if(!recognition)return;document.getElementById('answer-input').value='';document.getElementById('answer-input').placeholder='Listening — speak your answer...';recognition.start();}
+function stopListening(){
+  isListening=false;if(recognition){recognition.onend=null;recognition.stop();recognition=null;}
+  const btn=document.getElementById('mic-btn');btn.classList.remove('listening');btn.title='Voice answer';
+  const inp=document.getElementById('answer-input');inp.placeholder='Give your best answer...';
+  document.getElementById('send-btn').disabled=inp.value.trim().length<8;
+  setVoiceStatus('idle');if(inp.value.trim().length>0)autoResize(inp);
 }
-
-function startListening() {
-  recognition = initRecognition();
-  if (!recognition) return;
-  document.getElementById('answer-input').value = '';
-  document.getElementById('answer-input').placeholder = 'Listening... speak your answer';
-  recognition.start();
+function setVoiceStatus(s,msg){
+  const el=document.getElementById('input-status');
+  if(s==='listening')el.innerHTML='<span class="rec-dot"></span><span style="color:var(--red)">Recording — click mic again when done</span>';
+  else if(s==='error'){el.innerHTML=`<span style="color:var(--red)">${msg}</span>`;setTimeout(()=>setVoiceStatus('idle'),4000);}
+  else el.innerHTML='Enter to send · Shift+Enter for new line · Mic for voice';
 }
-
-function stopListening() {
-  isListening = false;
-  if (recognition) { recognition.onend = null; recognition.stop(); recognition = null; }
-  const btn = document.getElementById('mic-btn');
-  btn.classList.remove('listening');
-  btn.title = 'Voice answer';
-  const input = document.getElementById('answer-input');
-  input.placeholder = 'Give your best answer — be as detailed as you would in a real interview...';
-  const hasText = input.value.trim().length >= 8;
-  document.getElementById('send-btn').disabled = !hasText;
-  setVoiceStatus('idle');
-  if (hasText) autoResize(input);
-}
-
-function setVoiceStatus(state, msg) {
-  const el = document.getElementById('input-status');
-  if (state === 'listening') {
-    el.innerHTML = '<span class="vs-dot"></span><span style="color:var(--red)">Recording... speak your answer — click mic again when done</span>';
-  } else if (state === 'error') {
-    el.innerHTML = `<span style="color:var(--red)">${msg}</span>`;
-    setTimeout(() => setVoiceStatus('idle'), 4000);
-  } else {
-    el.innerHTML = '<span style="color:var(--text3)">Enter to send · Shift+Enter for new line · Mic to speak</span>';
-  }
-}
-
-// ── RESET ──
-function resetAll() {
-  if (confirm('Reset everything? This clears your profile and history.')) {
-    localStorage.removeItem(STORAGE_KEY);
-    localStorage.removeItem(HISTORY_KEY);
-    location.reload();
-  }
-}
-
-// ── BOOT ──
-if (loadProfile()) {
-  document.getElementById('onboarding').style.display = 'none';
-  initApp();
-}
+function resetAll(){if(confirm('Reset everything?')){localStorage.removeItem(STORAGE_KEY);localStorage.removeItem(HISTORY_KEY);location.reload();}}
+if(loadProfile()){document.getElementById('onboarding').style.display='none';initApp();}
 </script>
 </body>
 </html>
