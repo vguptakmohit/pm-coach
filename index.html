@@ -511,7 +511,7 @@ textarea#answer-input:focus{border-color:rgba(255,255,255,0.35);}
 </div>
 
 <script>
-const STORAGE_KEY='pmcoach_profile_v1',HISTORY_KEY='pmcoach_history_v1';
+const STORAGE_KEY='pmcoach_profile_v3',HISTORY_KEY='pmcoach_history_v3';
 const TYPE_COLORS={'Product Sense':'#4CAF7D','Metrics & Analytics':'#E07B3F','Execution & RCA':'#E05555','Behavioral':'rgba(255,255,255,0.4)','Estimation':'#6B9FE4','AI & GenAI':'#B57BF5'};
 let profile=null,state={company:null,type:'Product Sense',currentQuestion:null,isLoading:false};
 
@@ -549,7 +549,20 @@ function showOnboarding(){
   document.getElementById('onboarding').style.display='flex';
 }
 function loadProfile(){
-  try{const s=localStorage.getItem(STORAGE_KEY);if(s){profile=JSON.parse(s);return true;}}catch{}return false;
+  try{
+    const s=localStorage.getItem(STORAGE_KEY);
+    if(s){
+      const p=JSON.parse(s);
+      // validate profile has required fields
+      if(p && p.name && p.background && p.apikey && p.companies && p.companies.length > 0){
+        profile=p; return true;
+      } else {
+        console.log('Stale/invalid profile found, clearing:', p);
+        localStorage.removeItem(STORAGE_KEY);
+      }
+    }
+  }catch(e){console.log('Profile load error:',e);}
+  return false;
 }
 function initApp(){
   document.getElementById('app').classList.add('visible');
