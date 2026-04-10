@@ -280,10 +280,10 @@ textarea#answer-input:focus { border-color: var(--accent); }
     <div class="ob-hint">Selected companies appear as options in your interview. You can always change this later.</div>
 
     <hr class="ob-divider">
-    <div class="ob-section-title">API setup</div>
-    <label class="ob-label">ANTHROPIC API KEY <span style="color:var(--text3)">(free at console.anthropic.com)</span></label>
-    <input class="ob-input" id="ob-apikey" type="password" placeholder="sk-ant-..." />
-    <div class="ob-hint" style="margin-top:-12px">Your key is stored only in your browser (localStorage). It is never sent anywhere except directly to Anthropic's API.</div>
+    <div class="ob-section-title">API key</div>
+    <label class="ob-label">OPENROUTER API KEY <span style="color:var(--text3)">(free at openrouter.ai/keys)</span></label>
+    <input class="ob-input" id="ob-apikey" type="password" placeholder="sk-or-v1-..." />
+    <div class="ob-hint" style="margin-top:-12px">Stored only in your browser. Never sent anywhere except OpenRouter. Get a free key at openrouter.ai — $1 credit on signup, no card needed.</div>
 
     <button class="ob-submit" id="ob-submit" onclick="saveProfile()">Start coaching →</button>
   </div>
@@ -398,7 +398,7 @@ function saveProfile() {
   const apikey = document.getElementById('ob-apikey').value.trim();
 
   if (!name || !background || !apikey) {
-    alert('Please fill in your name, background, and API key.');
+    alert('Please fill in your name, background, and OpenRouter API key.');
     return;
   }
 
@@ -605,32 +605,31 @@ function parseFeedback(text) {
 }
 
 // ── API CALL ──
-// PROXY_URL: replace with your Cloudflare Worker URL after deployment
-// Leave as empty string to call Anthropic directly (requires CORS — use Worker for production)
-const PROXY_URL = '';
+// Using OpenRouter — paste your key from openrouter.ai/keys
+// Key is read from user profile (set during onboarding)
+const OPENROUTER_KEY = () => (typeof profile !== 'undefined' && profile.apikey) ? profile.apikey : '';
 
 async function callClaude(system, userMsg) {
-  const url = PROXY_URL || 'https://api.anthropic.com/v1/messages';
-  const headers = { 'Content-Type': 'application/json' };
-  if (!PROXY_URL) {
-    headers['x-api-key'] = profile.apikey;
-    headers['anthropic-version'] = '2023-06-01';
-    headers['anthropic-dangerous-direct-browser-access'] = 'true';
-  }
-  const res = await fetch(url, {
+  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
-    headers,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${OPENROUTER_KEY()}`,
+      'HTTP-Referer': window.location.href,
+      'X-Title': 'PM Interview Coach',
+    },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
+      model: 'anthropic/claude-sonnet-4-5',
       max_tokens: 1000,
-      system,
-      messages: [{ role: 'user', content: userMsg }],
-      ...(PROXY_URL ? { apiKey: profile.apikey } : {})
+      messages: [
+        { role: 'system', content: system },
+        { role: 'user',   content: userMsg }
+      ],
     })
   });
   const data = await res.json();
-  if (data.error) throw new Error(data.error.message);
-  return data.content[0].text;
+  if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
+  return data.choices[0].message.content;
 }
 
 // ── QUESTION ──
