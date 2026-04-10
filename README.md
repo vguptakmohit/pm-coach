@@ -2,7 +2,7 @@
 
 An AI-powered PM interview prep tool built with the Anthropic Claude API.
 
-**Live demo:** `https://YOUR-USERNAME.github.io/pm-coach`
+**Live demo:** `https://vguptakmohit.github.io/pm-coach`
 
 ## What it does
 
