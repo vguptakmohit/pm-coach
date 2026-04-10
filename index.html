@@ -193,6 +193,40 @@ textarea#answer-input:focus { border-color: var(--accent); }
 }
 .send-btn:hover { background: var(--accent2); }
 .send-btn:disabled { background: var(--border); border-color: var(--border); color: var(--text3); cursor: not-allowed; }
+.mic-btn {
+  width: 42px; height: 42px; border-radius: var(--radius); border: 1px solid var(--border2);
+  background: transparent; color: var(--text2); font-size: 16px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all 0.15s; position: relative;
+}
+.mic-btn:hover { border-color: var(--text3); color: var(--text); }
+.mic-btn.listening {
+  border-color: var(--red); color: var(--red);
+  background: rgba(255,107,91,0.08);
+  animation: mic-pulse 1.2s ease-in-out infinite;
+}
+.mic-btn.listening::after {
+  content: ''; position: absolute; inset: -4px; border-radius: 12px;
+  border: 1.5px solid var(--red); opacity: 0.4;
+  animation: mic-ring 1.2s ease-in-out infinite;
+}
+.mic-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+@keyframes mic-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+@keyframes mic-ring {
+  0% { transform: scale(1); opacity: 0.4; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+.voice-status {
+  font-size: 11px; font-family: 'DM Mono', monospace; margin-top: 7px;
+  display: flex; align-items: center; gap: 6px;
+}
+.voice-status .vs-dot {
+  width: 5px; height: 5px; border-radius: 50%; background: var(--red);
+  animation: mic-pulse 1s infinite;
+}
 .input-hint { font-size: 11px; color: var(--text3); font-family: 'DM Mono', monospace; margin-top: 7px; }
 
 .empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: var(--text3); text-align: center; padding: 40px; }
@@ -333,9 +367,17 @@ textarea#answer-input:focus { border-color: var(--accent); }
       <div class="input-area">
         <div class="input-wrap">
           <textarea id="answer-input" placeholder="Type your answer..." rows="1" oninput="autoResize(this)" onkeydown="handleKey(event)"></textarea>
+          <button class="mic-btn" id="mic-btn" onclick="toggleVoice()" title="Voice answer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+              <line x1="12" y1="19" x2="12" y2="23"/>
+              <line x1="8" y1="23" x2="16" y2="23"/>
+            </svg>
+          </button>
           <button class="send-btn" id="send-btn" onclick="submitAnswer()" disabled>↑</button>
         </div>
-        <div class="input-hint">Enter to send · Shift+Enter for new line</div>
+        <div id="input-status" class="input-hint" style="color:var(--text3)">Enter to send · Shift+Enter for new line · Mic to speak</div>
       </div>
     </div>
 
@@ -709,6 +751,106 @@ Be direct. No filler. Reference their real experience.`;
     addMsg('iv', `Error: ${e.message}`);
   }
   state.isLoading = false;
+}
+
+// ── VOICE INPUT ──
+let recognition = null;
+let isListening = false;
+
+function initRecognition() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return null;
+  const r = new SR();
+  r.continuous = true;
+  r.interimResults = true;
+  r.lang = 'en-IN';
+
+  let finalTranscript = '';
+
+  r.onstart = () => {
+    isListening = true;
+    finalTranscript = '';
+    const btn = document.getElementById('mic-btn');
+    btn.classList.add('listening');
+    btn.title = 'Stop recording';
+    setVoiceStatus('listening');
+  };
+
+  r.onresult = (e) => {
+    let interim = '';
+    finalTranscript = '';
+    for (let i = 0; i < e.results.length; i++) {
+      if (e.results[i].isFinal) finalTranscript += e.results[i][0].transcript + ' ';
+      else interim += e.results[i][0].transcript;
+    }
+    const input = document.getElementById('answer-input');
+    input.value = (finalTranscript + interim).trim();
+    autoResize(input);
+  };
+
+  r.onerror = (e) => {
+    if (e.error === 'not-allowed') {
+      setVoiceStatus('error', 'Mic access denied — allow microphone in browser settings');
+    } else if (e.error === 'no-speech') {
+      setVoiceStatus('error', 'No speech detected — try again');
+    } else {
+      setVoiceStatus('error', `Error: ${e.error}`);
+    }
+    stopListening();
+  };
+
+  r.onend = () => {
+    if (isListening) r.start(); // keep going until user stops
+  };
+
+  return r;
+}
+
+function toggleVoice() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    setVoiceStatus('error', 'Voice not supported — use Chrome or Edge');
+    return;
+  }
+  if (isListening) {
+    stopListening();
+  } else {
+    startListening();
+  }
+}
+
+function startListening() {
+  recognition = initRecognition();
+  if (!recognition) return;
+  document.getElementById('answer-input').value = '';
+  document.getElementById('answer-input').placeholder = 'Listening... speak your answer';
+  recognition.start();
+}
+
+function stopListening() {
+  isListening = false;
+  if (recognition) { recognition.onend = null; recognition.stop(); recognition = null; }
+  const btn = document.getElementById('mic-btn');
+  btn.classList.remove('listening');
+  btn.title = 'Voice answer';
+  const input = document.getElementById('answer-input');
+  input.placeholder = 'Give your best answer — be as detailed as you would in a real interview...';
+  const hasText = input.value.trim().length >= 8;
+  document.getElementById('send-btn').disabled = !hasText;
+  setVoiceStatus('idle');
+  if (hasText) autoResize(input);
+}
+
+function setVoiceStatus(state, msg) {
+  const el = document.getElementById('input-status');
+  if (state === 'listening') {
+    el.innerHTML = '<span class="vs-dot"></span><span style="color:var(--red)">Recording... speak your answer — click mic again when done</span>';
+  } else if (state === 'error') {
+    el.innerHTML = `<span style="color:var(--red)">${msg}</span>`;
+    setTimeout(() => setVoiceStatus('idle'), 4000);
+  } else {
+    el.innerHTML = '<span style="color:var(--text3)">Enter to send · Shift+Enter for new line · Mic to speak</span>';
+  }
 }
 
 // ── RESET ──
