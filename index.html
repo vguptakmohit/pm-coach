@@ -566,8 +566,6 @@ function loadProfile(){
 }
 function initApp(){
   document.getElementById('app').classList.add('visible');
-  const initials=profile.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-  document.getElementById('nav-logo').textContent=initials;
   document.getElementById('empty-name').innerHTML='Ready when you <em>are</em>, '+profile.name.split(' ')[0];
   const list=document.getElementById('company-list');list.innerHTML='';
   profile.companies.forEach((co,i)=>{
